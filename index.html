@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qijin Yin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #111;
+      background: #fff;
+    }
+
+    a { color: #4f46e5; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap { max-width: min(860px, 100%); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2.5rem); }
+
+    /* ── Hero ── */
+    .hero { padding: 3.5rem 0 2rem; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 2.5rem;
+      align-items: flex-start;
+    }
+
+    .photo-wrap { position: relative; }
+    .photo-wrap img {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-fallback {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: #e0e7ff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem; font-weight: 600; color: #4f46e5;
+      letter-spacing: -1px;
+    }
+
+    .hero-text h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: -0.3px; }
+    .hero-text .affil { color: #555; margin-top: 0.2rem; font-size: 0.9rem; }
+    .hero-text .bio {
+      margin-top: 0.9rem; font-size: 0.93rem;
+      color: #333; line-height: 1.75;
+    }
+
+    .links { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
+    .links a {
+      font-size: 0.85rem; font-weight: 500;
+      color: #4f46e5; border-bottom: 1px solid #c7d2fe;
+      padding-bottom: 1px;
+    }
+    .links a:hover { text-decoration: none; border-bottom-color: #4f46e5; }
+
+    /* ── Sections ── */
+    .section { padding: 1.8rem 0; border-top: 1px solid #e5e7eb; }
+    .section h2 {
+      font-size: 1rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: #888; margin-bottom: 1rem;
+    }
+
+    /* ── News ── */
+    .news-list { list-style: none; }
+    .news-list li {
+      font-size: 0.9rem; color: #333;
+      padding: 0.3rem 0;
+      display: flex; gap: 0.75rem;
+    }
+    .news-list .date {
+      flex-shrink: 0;
+      color: #888; font-size: 0.82rem;
+      width: 5.5rem; padding-top: 1px;
+    }
+
+    /* ── Publications (shared) ── */
+    .pub { padding: 1rem 0 1rem 1rem; }
+    .pub-title { font-size: 0.95rem; font-weight: 500; line-height: 1.5; }
+    .pub-title a { color: #111; }
+    .pub-title a:hover { color: #4f46e5; text-decoration: none; }
+    .pub-authors { font-size: 0.84rem; color: #555; margin-top: 0.2rem; }
+    .pub-authors strong { color: #111; font-weight: 600; }
+    .pub-meta { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.35rem; flex-wrap: wrap; }
+    .venue {
+      display: inline-block;
+      font-size: 0.75rem; font-weight: 600;
+      padding: 0.1rem 0.45rem; border-radius: 3px;
+      letter-spacing: 0.02em;
+    }
+    .venue-top { background: #eef2ff; color: #4338ca; }   /* top-tier */
+    .venue-mid { background: #f3f4f6; color: #374151; }   /* others */
+    .pub-year { font-size: 0.8rem; color: #888; }
+    .pub-links { display: flex; gap: 0.75rem; margin-top: 0.45rem; }
+    .pub-links a {
+      font-size: 0.8rem; color: #4f46e5;
+      border: 1px solid #c7d2fe; border-radius: 4px;
+      padding: 0.1rem 0.45rem;
+    }
+    .pub-links a:hover { background: #eef2ff; text-decoration: none; }
+
+    /* Selected: highlighted left border */
+    .pub-selected {
+      border-left: 3px solid #4f46e5;
+      background: #fafafa;
+      border-radius: 0 6px 6px 0;
+    }
+
+    /* Full pub list: no border, subtler */
+    .pub-plain { border-left: 3px solid transparent; }
+
+    /* Theme group */
+    .theme-group { margin-bottom: 2rem; }
+    .theme-label {
+      font-size: 0.82rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: #aaa; margin-bottom: 0.25rem;
+    }
+    .theme-group .pub-plain + .pub-plain { border-top: 1px solid #f0f0f0; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid #e5e7eb;
+      padding: 1.5rem 0; text-align: center;
+      font-size: 0.8rem; color: #aaa;
+    }
+    footer a { color: #aaa; }
+    footer a:hover { color: #4f46e5; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .photo-wrap { display: flex; justify-content: center; }
+      .photo-fallback { margin: 0 auto; }
+      .links { justify-content: center; }
+      .hero-text h1 { font-size: clamp(1.3rem, 5vw, 1.75rem); }
+      .pub-meta { flex-wrap: wrap; }
+    }
+    @media (min-width: 1100px) {
+      .wrap { padding: 0 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ── Hero ── -->
+  <div class="hero">
+    <div class="hero-grid">
+      <div class="photo-wrap">
+        <!-- Replace photo.jpg with your real photo. If missing, fallback shows initials. -->
+        <img src="photo.jpg" alt="Qijin Yin"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <div class="photo-fallback" style="display:none;">鄞</div>
+      </div>
+      <div class="hero-text">
+        <h1>Qijin Yin <span style="font-weight:300;font-size:1.1rem;color:#555;">鄞启进</span></h1>
+        <div class="affil">Researcher · Zhongguancun Academy, Beijing</div>
+        <p class="bio">
+          I develop deep learning and graph neural network methods for computational biology,
+          with a focus on epigenomics, single-cell omics, and drug discovery.
+          My work bridges machine learning methodology with fundamental biological questions
+          in gene regulation, cell identity, and therapeutic target prediction.
+        </p>
+        <div class="links">
+          <a href="https://scholar.google.com/citations?user=zXi6HYgAAAAJ" target="_blank">Google Scholar</a>
+          <a href="https://github.com/qijinyin" target="_blank">GitHub</a>
+          <a href="mailto:yinqijin@bza.edu.cn">Email</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── News ── -->
+  <div class="section">
+    <h2>News</h2>
+    <ul class="news-list">
+      <li>
+        <span class="date">2026 Feb</span>
+        <span>Paper accepted at <strong>AAAI 2026</strong>: <a href="https://openreview.net/forum?id=uWKTdBO4N8" target="_blank">TrinityDNA</a>, a bio-inspired foundation model for long-sequence DNA modeling.</span>
+      </li>
+      <li>
+        <span class="date">2025 Sep</span>
+        <span>Two new papers in <strong>Nature Communications</strong>: <a href="https://www.nature.com/articles/s41467-025-59780-5" target="_blank">CREATE</a> (cis-regulatory element identification) and <a href="https://www.nature.com/articles/s41467-025-63478-z" target="_blank">MorphDiff</a> (transcriptome-guided cellular morphology prediction).</span>
+      </li>
+      <li>
+        <span class="date">2024 Aug</span>
+        <span><a href="https://www.nature.com/articles/s42003-024-06564-0" target="_blank">UniCoord</a>, a universal coordinate system for single-cell atlas published in <strong>Communications Biology</strong>.</span>
+      </li>
+      <li>
+        <span class="date">2023 Jan</span>
+        <span><a href="https://doi.org/10.1093/nar/gkac859" target="_blank">HiChIPdb</a> database paper accepted in <strong>Nucleic Acids Research</strong> (Database Issue).</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ── Selected Publications ── -->
+  <div class="section">
+    <h2>Selected Publications</h2>
+
+    <!-- HiChIPdb -->
+    <div class="pub pub-selected">
+      <div class="pub-title">
+        <a href="https://doi.org/10.1093/nar/gkac859" target="_blank">
+          HiChIPdb: a comprehensive database of HiChIP regulatory interactions
+        </a>
+      </div>
+      <div class="pub-authors">W Zeng<sup>*</sup>, Q Liu<sup>*</sup>, <strong>Q Yin</strong><sup>*</sup>, R Jiang, WH Wong</div>
+      <div class="pub-meta">
+        <span class="venue venue-top">Nucleic Acids Research</span>
+        <span class="pub-year">2023</span>
+        <span class="pub-year">· 31 citations</span>
+      </div>
+      <div class="pub-links">
+        <a href="https://doi.org/10.1093/nar/gkac859" target="_blank">Paper</a>
+        <a href="https://health.tsinghua.edu.cn/hichipdb/" target="_blank">Database</a>
+      </div>
+    </div>
+
+    <!-- scGraph -->
+    <div class="pub pub-selected" style="margin-top:0.75rem;">
+      <div class="pub-title">
+        <a href="https://doi.org/10.1093/bioinformatics/btac235" target="_blank">
+          scGraph: a graph neural network-based approach to automatically identify cell types
+        </a>
+      </div>
+      <div class="pub-authors"><strong>Q Yin</strong>, Q Liu, Z Fu, W Zeng, B Zhang, X Zhang, R Jiang, H Lv</div>
+      <div class="pub-meta">
+        <span class="venue venue-top">Bioinformatics</span>
+        <span class="pub-year">2022</span>
+        <span class="pub-year">· 34 citations</span>
+      </div>
+      <div class="pub-links">
+        <a href="https://doi.org/10.1093/bioinformatics/btac235" target="_blank">Paper</a>
+        <a href="https://github.com/QijinYin/scGraph" target="_blank">Code</a>
+      </div>
+    </div>
+
+    <!-- DeepHistone -->
+    <div class="pub pub-selected" style="margin-top:0.75rem;">
+      <div class="pub-title">
+        <a href="https://doi.org/10.1186/s12864-019-5489-4" target="_blank">
+          DeepHistone: a deep learning approach to predicting histone modifications
+        </a>
+      </div>
+      <div class="pub-authors"><strong>Q Yin</strong>, M Wu, Q Liu, H Lv, R Jiang</div>
+      <div class="pub-meta">
+        <span class="venue venue-top">BMC Genomics</span>
+        <span class="pub-year">2019</span>
+        <span class="pub-year">· 103 citations</span>
+      </div>
+      <div class="pub-links">
+        <a href="https://doi.org/10.1186/s12864-019-5489-4" target="_blank">Paper</a>
+        <a href="https://github.com/QijinYin/DeepHistone" target="_blank">Code</a>
+      </div>
+    </div>
+
+    <!-- PRKAR1A -->
+    <div class="pub pub-selected" style="margin-top:0.75rem;">
+      <div class="pub-title">
+        <a href="https://doi.org/10.3389/fimmu.2022.878876" target="_blank">
+          PRKAR1A and SDCBP serve as potential predictors of heart failure following acute myocardial infarction
+        </a>
+      </div>
+      <div class="pub-authors">Q Chen, L Su, C Liu, F Gao, H Chen<sup>†</sup>, <strong>Q Yin</strong><sup>†</sup>, S Li<sup>†</sup></div>
+      <div class="pub-meta">
+        <span class="venue venue-top">Frontiers in Immunology</span>
+        <span class="pub-year">2022</span>
+        <span class="pub-year">· 30 citations</span>
+      </div>
+      <div class="pub-links">
+        <a href="https://doi.org/10.3389/fimmu.2022.878876" target="_blank">Paper</a>
+      </div>
+    </div>
+
+    <p style="font-size:0.82rem;color:#aaa;margin-top:1.25rem;">
+      <strong>Bold</strong> = Qijin Yin &nbsp;·&nbsp; <sup>*</sup> Co-first author &nbsp;·&nbsp; <sup>†</sup> Co-corresponding author. See full list below or on
+      <a href="https://scholar.google.com/citations?user=zXi6HYgAAAAJ" target="_blank">Google Scholar</a>.
+    </p>
+  </div>
+
+  <!-- ── Full Publications ── -->
+  <div class="section">
+    <h2>Publications</h2>
+
+    <!-- Group 1: Genomics -->
+    <div class="theme-group">
+      <div class="theme-label">Genomics</div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://doi.org/10.1186/s12864-019-5489-4" target="_blank">
+            DeepHistone: a deep learning approach to predicting histone modifications
+          </a>
+        </div>
+        <div class="pub-authors"><strong>Q Yin</strong>, M Wu, Q Liu, H Lv, R Jiang</div>
+        <div class="pub-meta">
+          <span class="venue venue-top">BMC Genomics</span>
+          <span class="pub-year">2019</span>
+        </div>
+      </div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://doi.org/10.1093/bioinformatics/btx679" target="_blank">
+            Chromatin accessibility prediction via a hybrid deep convolutional neural network
+          </a>
+        </div>
+        <div class="pub-authors">Q Liu, F Xia, <strong>Q Yin</strong>, R Jiang</div>
+        <div class="pub-meta">
+          <span class="venue venue-top">Bioinformatics</span>
+          <span class="pub-year">2018</span>
+        </div>
+      </div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://doi.org/10.1093/nar/gkac859" target="_blank">
+            HiChIPdb: a comprehensive database of HiChIP regulatory interactions
+          </a>
+        </div>
+        <div class="pub-authors">W Zeng<sup>*</sup>, Q Liu<sup>*</sup>, <strong>Q Yin</strong><sup>*</sup>, R Jiang, WH Wong</div>
+        <div class="pub-meta">
+          <span class="venue venue-top">Nucleic Acids Research</span>
+          <span class="pub-year">2023</span>
+        </div>
+      </div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://www.nature.com/articles/s41467-025-59780-5" target="_blank">
+            CREATE: cell-type-specific cis-regulatory element identification via discrete embedding
+          </a>
+        </div>
+        <div class="pub-authors">X Cui, <strong>Q Yin</strong>, Z Gao, Z Li, X Chen, H Lv, S Chen, Q Liu, W Zeng, R Jiang</div>
+        <div class="pub-meta">
+          <span class="venue venue-top">Nature Communications</span>
+          <span class="pub-year">2025</span>
+        </div>
+      </div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://openreview.net/forum?id=uWKTdBO4N8" target="_blank">
+            Trinitydna: A bio-inspired foundational model for efficient long-sequence DNA modeling
+          </a>
+        </div>
+        <div class="pub-authors">Q Yang, Y Guo, Z Liu, Y Yang, <strong>Q Yin</strong>, S Li, S Ji, L Chao, X Zhang</div>
+        <div class="pub-meta">
+          <span class="venue venue-top">AAAI</span>
+          <span class="pub-year">2026</span>
+        </div>
+      </div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://link.springer.com/article/10.1186/s12920-021-00890-6" target="_blank">
+            Identification of monocyte-associated genes as predictive biomarkers of heart failure after acute myocardial infarction
+          </a>
+        </div>
+        <div class="pub-authors">Q Chen<sup>*</sup>, <strong>Q Yin</strong><sup>*</sup>, J Song<sup>*</sup>, C Liu, H Chen, S Li</div>
+        <div class="pub-meta">
+          <span class="venue venue-mid">BMC Medical Genomics</span>
+          <span class="pub-year">2021</span>
+        </div>
+      </div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://doi.org/10.3389/fimmu.2022.878876" target="_blank">
+            PRKAR1A and SDCBP serve as potential predictors of heart failure following acute myocardial infarction
+          </a>
+        </div>
+        <div class="pub-authors">Q Chen, L Su, C Liu, F Gao, H Chen<sup>†</sup>, <strong>Q Yin</strong><sup>†</sup>, S Li<sup>†</sup></div>
+        <div class="pub-meta">
+          <span class="venue venue-top">Frontiers in Immunology</span>
+          <span class="pub-year">2022</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 2: Single-Cell Omics -->
+    <div class="theme-group">
+      <div class="theme-label">Single-Cell Omics</div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://doi.org/10.1093/bioinformatics/btac235" target="_blank">
+            scGraph: a graph neural network-based approach to automatically identify cell types
+          </a>
+        </div>
+        <div class="pub-authors"><strong>Q Yin</strong>, Q Liu, Z Fu, W Zeng, B Zhang, X Zhang, R Jiang, H Lv</div>
+        <div class="pub-meta">
+          <span class="venue venue-top">Bioinformatics</span>
+          <span class="pub-year">2022</span>
+        </div>
+      </div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://www.nature.com/articles/s42003-024-06564-0" target="_blank">
+          Building a learnable universal coordinate system for single-cell atlas with a joint-VAE model
+          </a>
+        </div>
+        <div class="pub-authors">H Gao, K Hua, X Wu, L Wei, S Chen, <strong>Q Yin</strong>, R Jiang, X Zhang</div>
+        <div class="pub-meta">
+          <span class="venue venue-top">Communications Biology</span>
+          <span class="pub-year">2024</span>
+        </div>
+      </div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://www.nature.com/articles/s41467-025-63478-z" target="_blank">
+            Prediction of cellular morphology changes under perturbations with a transcriptome-guided diffusion model
+          </a>
+        </div>
+        <div class="pub-authors">X Wang, Y Fan, Y Guo, C Fu, K Lee, K Dallakyan, Y Li, <strong>Q Yin</strong>, Y Li, L Song</div>
+        <div class="pub-meta">
+          <span class="venue venue-top">Nature Communications</span>
+          <span class="pub-year">2025</span>
+        </div>
+      </div>
+
+
+    <!-- Group 3: Drug Discovery -->
+    <div class="theme-group">
+      <div class="theme-label">Drug Discovery</div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://doi.org/10.15302/J-QB-022-0320" target="_blank">
+            DeepDrug: a general graph-based deep learning framework for drug–drug interactions and drug–target interactions prediction
+          </a>
+        </div>
+        <div class="pub-authors"><strong>Q Yin</strong>, R Fan, X Cao, Q Liu, R Jiang, W Zeng</div>
+        <div class="pub-meta">
+          <span class="venue venue-mid">Quantitative Biology</span>
+          <span class="pub-year">2023</span>
+        </div>
+      </div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://www.sciencedirect.com/science/article/abs/pii/S0010482522008356" target="_blank">
+            REDDA: Integrating multiple biological relations to heterogeneous graph neural network for drug–disease association prediction
+          </a>
+        </div>
+        <div class="pub-authors">Y Gu, S Zheng, <strong>Q Yin</strong>, R Jiang, J Li</div>
+        <div class="pub-meta">
+          <span class="venue venue-top">Computers in Biology and Medicine</span>
+          <span class="pub-year">2022</span>
+        </div>
+      </div>
+
+      <div class="pub pub-plain">
+        <div class="pub-title">
+          <a href="https://doi.org/10.1093/bib/bbac099" target="_blank">
+            An efficient curriculum learning-based strategy for molecular graph learning
+          </a>
+        </div>
+        <div class="pub-authors">Y Gu, S Zheng, Z Xu, <strong>Q Yin</strong>, L Li, J Li</div>
+        <div class="pub-meta">
+          <span class="venue venue-top">Briefings in Bioinformatics</span>
+          <span class="pub-year">2022</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /section publications -->
+
+</div><!-- /wrap -->
+
+<footer>
+  <div class="wrap">
+    Qijin Yin (鄞启进) &nbsp;·&nbsp; Last updated April 2026 &nbsp;·&nbsp;
+    <a href="https://scholar.google.com/citations?user=zXi6HYgAAAAJ" target="_blank">Google Scholar</a>
+  </div>
+</footer>
+
+</body>
+</html>
